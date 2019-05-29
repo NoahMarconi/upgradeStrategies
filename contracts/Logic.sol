@@ -22,7 +22,7 @@ contract Logic {
 
     function setB(uint256 val) public {
         b = val;
-    } 
+    }
 
     function getA() public returns(uint256) {
         emit LogA(a);

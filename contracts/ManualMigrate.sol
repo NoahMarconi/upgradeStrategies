@@ -14,30 +14,46 @@ interface MigrateContract {
 
 contract ManualMigrate {
 
-    mapping (address => uint256) public _balances;
+    /*----------  Types  ----------*/
 
     enum Stage { Active, Stopped, Migrating }
-    Stage public _stage;
 
+    /*----------  Globals  ----------*/
+
+    mapping (address => uint256) public _balances;
+    Stage public stage;
     MigrateContract private _newContract;
 
+    /*----------  Modifiers  ----------*/
+
     modifier whenLive() {
-        require(_stage == Stage.Active, "Function not permitted when isLive is false.");
+        require(
+            stage == Stage.Active,
+            "Function not permitted when not Status.Active."
+        );
         _;
     }
+
+
+    /*----------  Owner Methods  ----------*/
 
     function retireContract()
         public
         whenLive
+        onlyOwner
     {
-        _stage = Stage.Stopped;
+        stage = Stage.Stopped;
     }
 
     function initMigrate(MigrateContract newContract)
         public
+        onlyOwner
     {
-        require(_stage == Stage.Stopped, "Stage must be set to Stopped before initializing migration.");
-        _stage = Stage.Migrating;
+        require(
+            stage == Stage.Stopped,
+            "Stage must be set to Stopped before initializing migration."
+        );
+        stage = Stage.Migrating;
         _newContract = newContract;
     }
 
@@ -51,7 +67,10 @@ contract ManualMigrate {
     function migrateData(address account)
         public
     {
-        require(_stage == Stage.Migrating, "Stage must be set to Migrating before migrating data");
+        require(
+            stage == Stage.Migrating,
+            "Stage must be set to Migrating before migrating data."
+        );
         uint256 amountToMove = _balances[account];
         delete _balances[account];
         _newContract.migrateData(account, amountToMove);

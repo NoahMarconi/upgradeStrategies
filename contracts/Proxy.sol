@@ -21,10 +21,10 @@ contract Proxy {
 
     function implementation() private view returns(address){
         return _logicContract;
-    }    
+    }
 
     function setLogicContract(address logicContract) public {
-        _logicContract = logicContract; 
+        _logicContract = logicContract;
     }
 
     // source: https://github.com/zeppelinos/labs/blob/master/upgradeability_using_eternal_storage/contracts/Proxy.sol

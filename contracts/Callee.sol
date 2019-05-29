@@ -1,7 +1,7 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 
-contract Callee { 
+contract Callee {
 
     mapping (bytes32 => bytes) public _bytesStore;
 
@@ -22,7 +22,7 @@ contract Callee {
     {
         _bytesStore[key] = value;
     }
-    
+
     function getBytes(bytes32 key)
         external
         view
